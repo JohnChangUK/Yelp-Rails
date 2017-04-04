@@ -10,6 +10,7 @@ feature 'restaurants' do
   end
 
   context 'restaurants have been added' do
+
   before do
     Restaurant.create(name: 'KFC')
   end
@@ -59,7 +60,7 @@ context 'editing restaurants' do
     expect(page).to have_content 'Deep fried goodness'
     expect(current_path).to eq '/restaurants/1'
   end
-  
+
 end
 
 context 'deleting restaurants' do
@@ -73,6 +74,17 @@ context 'deleting restaurants' do
     expect(page).to have_content 'Restaurant deleted successfully'
   end
 
+end
+
+context 'an invalid restaurant' do
+  scenario 'does not let you submut a name that is too short' do
+    visit '/restaurants'
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'kf'
+    click_button 'Create Restaurant'
+    expect(page).not_to have_css 'h2', text: 'kf'
+    expect(page).to have_content 'Name is too short (minimum is 3 characters)'
+  end
 end
 
 end
